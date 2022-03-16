@@ -1,20 +1,42 @@
 parameters:
-- name: configs
-  type: string
-  default: 'x86,x64'
+- name: runPerfTests
+  type: boolean
+  default: false
 
 trigger: none
 
-jobs:
-- ${{ if contains(parameters.configs, 'x86') }}:
-  - job: x86
+stages:
+- stage: Build
+  displayName: Build
+  jobs:
+  - job: Build
     steps:
-    - script: echo Building x86...
-- ${{ if contains(parameters.configs, 'x64') }}:
-  - job: x64
+    - script: echo running Build
+
+
+- stage: UnitTest
+  displayName: Unit Test
+  dependsOn: Build
+  jobs:
+  - job: UnitTest
     steps:
-    - script: echo Building x64...
-- ${{ if contains(parameters.configs, 'arm') }}:
-  - job: arm
+    - script: echo running UnitTest
+
+
+- ${{ if eq(parameters.runPerfTests, true) }}:
+  - stage: PerfTest
+    displayName: Performance Test
+    dependsOn: Build
+    jobs:
+    - job: PerfTest
+      steps:
+      - script: echo running PerfTest
+
+
+- stage: Deploy
+  displayName: Deploy
+  dependsOn: UnitTest
+  jobs:
+  - job: Deploy
     steps:
-    - script: echo Building arm...
+    - script: echo running UnitTest
