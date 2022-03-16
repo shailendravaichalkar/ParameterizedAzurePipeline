@@ -1,0 +1,17 @@
+trigger: none
+
+jobs:
+- job: build
+  displayName: build
+  pool: 
+    vmImage: windows-latest
+  steps:
+  - script: echo building $(Build.BuildNumber) with windows-latest
+
+  - task: WaelHamze.xrm-ci-framework-build-tasks.MSCRMToolInstaller.MSCRMToolInstaller@12
+    displayName: 'Power DevOps Tool Installer'
+
+  - task: WaelHamze.xrm-ci-framework-build-tasks.MSCRMPing.MSCRMPing@12
+    displayName: 'Ping Environment'
+    inputs:
+      crmConnectionString: '$(ConnectionString)'
