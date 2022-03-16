@@ -1,17 +1,20 @@
+parameters:
+- name: configs
+  type: string
+  default: 'x86,x64'
+
 trigger: none
 
 jobs:
-- job: build
-  displayName: build
-  pool: 
-    vmImage: windows-latest
-  steps:
-  - script: echo building $(Build.BuildNumber) with windows-latest
-
-  - task: WaelHamze.xrm-ci-framework-build-tasks.MSCRMToolInstaller.MSCRMToolInstaller@12
-    displayName: 'Power DevOps Tool Installer'
-
-  - task: WaelHamze.xrm-ci-framework-build-tasks.MSCRMPing.MSCRMPing@12
-    displayName: 'Ping Environment'
-    inputs:
-      crmConnectionString: '$(ConnectionString)'
+- ${{ if contains(parameters.configs, 'x86') }}:
+  - job: x86
+    steps:
+    - script: echo Building x86...
+- ${{ if contains(parameters.configs, 'x64') }}:
+  - job: x64
+    steps:
+    - script: echo Building x64...
+- ${{ if contains(parameters.configs, 'arm') }}:
+  - job: arm
+    steps:
+    - script: echo Building arm...
