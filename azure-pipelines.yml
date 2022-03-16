@@ -1,42 +1,27 @@
 parameters:
-- name: runPerfTests
-  type: boolean
-  default: false
+- name: Solution
+  type: string
+  default: 'Entities-Customizations'
+  values:
+   - Entities-Customizations
+   - Plugins-Customization
+   - Reports-Customization
+
 
 trigger: none
 
-stages:
-- stage: Build
-  displayName: Build
-  jobs:
-  - job: Build
+jobs:
+- ${{ if contains(parameters.Solution, 'Entities-Customizations') }}:
+  - job: Entities-Customizations
     steps:
-    - script: echo running Build
+    - script: echo Entities-Customizations
 
-
-- stage: UnitTest
-  displayName: Unit Test
-  dependsOn: Build
-  jobs:
-  - job: UnitTest
+- ${{ if contains(parameters.Solution, 'Plugins-Customization') }}:
+  - job: Plugins-Customization
     steps:
-    - script: echo running UnitTest
+    - script: echo Plugins-Customization
 
-
-- ${{ if eq(parameters.runPerfTests, true) }}:
-  - stage: PerfTest
-    displayName: Performance Test
-    dependsOn: Build
-    jobs:
-    - job: PerfTest
-      steps:
-      - script: echo running PerfTest
-
-
-- stage: Deploy
-  displayName: Deploy
-  dependsOn: UnitTest
-  jobs:
-  - job: Deploy
+- ${{ if contains(parameters.Solution, 'Reports-Customization') }}:
+  - job: Reports-Customization
     steps:
-    - script: echo running UnitTest
+    - script: echo Reports-Customization
