@@ -1,7 +1,7 @@
 parameters:
 - name: Solution
   type: string
-  default: 'Entities-Customizations'
+  default: 'Entities_Customizations'
   values:
    - Entities-Customizations
    - Plugins-Customization
@@ -11,17 +11,17 @@ parameters:
 trigger: none
 
 jobs:
-- ${{ if contains(parameters.Solution, 'Entities-Customizations') }}:
+- ${{ if contains(parameters.Solution, 'Entities_Customizations') }}:
   - job: Entities-Customizations
     steps:
     - script: echo Entities-Customizations
 
-- ${{ if contains(parameters.Solution, 'Plugins-Customization') }}:
+- ${{ if contains(parameters.Solution, 'Plugins_Customization') }}:
   - job: Plugins-Customization
     steps:
     - script: echo Plugins-Customization
 
-- ${{ if contains(parameters.Solution, 'Reports-Customization') }}:
+- ${{ if contains(parameters.Solution, 'Reports_Customization') }}:
   - job: Reports-Customization
     steps:
     - script: echo Reports-Customization
